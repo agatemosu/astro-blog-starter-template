@@ -2,7 +2,9 @@ name: Deploy to Cloudflare Workers
 
 on:
   push:
-    branches: [main, master, prod]
+    branches:
+      - main
+      - prod
 
   pull_request:
     types:
@@ -37,12 +39,19 @@ jobs:
         run: pnpm run build
 
       - name: Deploy Worker
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/prod'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Deploy Preview Worker
+        if: github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: versions upload --tag="main" --preview-alias="staging"
+
+      - name: Deploy PR Preview Worker
         if: github.event_name == 'pull_request'
         id: deploy_docs
         uses: cloudflare/wrangler-action@v3
