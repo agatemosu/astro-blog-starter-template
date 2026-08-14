@@ -44,12 +44,12 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
-      - name: Deploy Preview Worker
+      - name: Deploy Staging Worker
         if: github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: versions upload --tag="main" --preview-alias="staging"
+          environment: staging
 
       - name: Deploy PR Preview Worker
         if: github.event_name == 'pull_request'
