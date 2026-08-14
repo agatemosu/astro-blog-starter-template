@@ -12,6 +12,8 @@
 	},
 	"upload_source_maps": true,
 	"env": {
-		"staging": {}
+		"staging": {
+			"name": "astro-blog-starter-template-staging"
+		}
 	}
 }
