@@ -49,7 +49,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          environment: staging
+          command: versions upload --tag="main" --preview-alias="staging"
 
       - name: Deploy PR Preview Worker
         if: github.event_name == 'pull_request'
@@ -61,7 +61,7 @@ jobs:
 
       - name: Post PR Comment
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PREVIEW_URL: ${{ steps.deploy_docs.outputs.deployment-url }}
         with:
